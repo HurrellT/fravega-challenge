@@ -38,3 +38,29 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+
+
+
+
+
+
+
+
+
+
+
+
+Home (usar csr)
+X Obtén una lista inicial de usuarios de la API de GitHub Users.
+X Mostrar los usuarios en una lista con sus nombres y avatares.
+○ Implementar un buscador que permita filtrar los usuarios haciendo
+peticiones a la API por nombre.
+○ Cada usuario debe tener un enlace a una página de detalle.
+○ Poder poner como favorito los usuarios (sin necesidad de persistir)
+2. Página de Detalle del Usuario (usar ssr)
+○ Mostrar los detalles de un usuario específico cuando se hace clic en él
+desde la página de listado (nombre, avatar, bio, repositorios, etc.).
+○ Mostrar si es favorito y permitir agregar o eliminarlo
+3. Estilo
+○ Podes usar CSS puro, styled-components o una librería de componentes
+como Material-UI para el estilo.
