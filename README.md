@@ -55,7 +55,7 @@ Tengo una filosofia de utilizar la menor cantidad de dependencias y librerias po
 Home (usar csr)
 X Obtén una lista inicial de usuarios de la API de GitHub Users.
 X Mostrar los usuarios en una lista con sus nombres y avatares.
-○ Implementar un buscador que permita filtrar los usuarios haciendo
+X Implementar un buscador que permita filtrar los usuarios haciendo
 peticiones a la API por nombre.
 ○ Cada usuario debe tener un enlace a una página de detalle.
 ○ Poder poner como favorito los usuarios (sin necesidad de persistir)
@@ -66,3 +66,6 @@ desde la página de listado (nombre, avatar, bio, repositorios, etc.).
 3. Estilo
 ○ Podes usar CSS puro, styled-components o una librería de componentes
 como Material-UI para el estilo.
+
+Documentación
+Deploy en Vercel
