@@ -44,7 +44,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/b
 
 
 
-
+Dada la libertad para utilizar librerias de componentes decidi utilizar ShadcnUI que permite la customizacion de los componentes directamente desde el codigo y no mediante una interfaz provista.
+ShadcnUI utiliza TailwindCSS, por eso mismo utilice TailwindCSS para el resto de los estilos, manteniendo consistencia y coherencia en el proyecto.
+Tengo una filosofia de utilizar la menor cantidad de dependencias y librerias posibles, por eso tambien me parece una buena opcion ShadcnUI o librerias como RadixUI que brinda componentes primitivos y completamente customizables gracias a ser open-source.
 
 
 

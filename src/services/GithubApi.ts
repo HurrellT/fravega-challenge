@@ -7,7 +7,7 @@ const ENDPOINTS = {
 };
 
 export const fetchGitHubUsers = async (): Promise<GitHubUser[]> => {
-  const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.USERS}`);
+  const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.USERS}?per_page=32`);
   
   if (!response.ok) {
     throw new Error(`Failed to fetch GitHub users: ${response.status}`);
@@ -17,13 +17,14 @@ export const fetchGitHubUsers = async (): Promise<GitHubUser[]> => {
 }
 
 export const searchGitHubUsers = async (query: string): Promise<GitHubUser[]> => {
-  const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.SEARCH}/users?q=${query}`);
+  const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.SEARCH}/users?q=${encodeURIComponent(query)}&per_page=32`);
   
   if (!response.ok) {
     throw new Error(`Failed to search GitHub users: ${response.status}`);
   }
   
-  return await response.json();
+  const data = await response.json();
+  return data.items || []; // GitHub search API returns results in an 'items' property
 }
 
 export const fetchGitHubUser = async (username: string): Promise<GitHubUser> => {
