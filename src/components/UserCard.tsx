@@ -16,7 +16,7 @@ export const UserCard = ({ user, showFavoriteButton = true }: UserCardProps) => 
     <Card
       key={user.id}
       onClick={() => router.push(`/${user.login}`)}
-      className="relative cursor-pointer hover:shadow-md transition-shadow min-w-72 w-full"
+      className="relative cursor-pointer hover:shadow-md transition-shadow w-72"
     >
       <CardContent className="flex items-center gap-4 p-6 justify-between">
         <div className="flex items-center gap-4">
