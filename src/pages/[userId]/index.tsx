@@ -13,18 +13,18 @@ import {
   fetchUserGists, 
   fetchUserRepositories 
 } from "@/services/GithubApi";
-import { Gist, GitHubUser, Repository } from "@/types/GitHubUser";
+import { GHUserGistType, GitHubUserType, GHUserRepositoryType } from "@/types/GitHubUser";
 import { ExternalLink, Github, MapPin } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
 interface UserDetailsProps {
-  user: GitHubUser;
-  repositories: Repository[];
-  followers: GitHubUser[];
-  following: GitHubUser[];
-  gists: Gist[];
+  user: GitHubUserType;
+  repositories: GHUserRepositoryType[];
+  followers: GitHubUserType[];
+  following: GitHubUserType[];
+  gists: GHUserGistType[];
   errorMessage?: string;
 }
 
@@ -36,7 +36,6 @@ export default function UserDetails({
   gists,
   errorMessage,
 }: UserDetailsProps) {
-  // Show error toast only after component mounts (client-side)
   useEffect(() => {
     if (errorMessage) {
       toast.error(errorMessage);
@@ -273,7 +272,6 @@ export async function getServerSideProps(context: {
 }) {
   const { userId } = context.params;
   try {
-    // Fetch all data in parallel for better performance
     const [user, repositories, followers, following, gists] = await Promise.all([
       fetchGitHubUser(userId),
       fetchUserRepositories(userId),
@@ -292,10 +290,10 @@ export async function getServerSideProps(context: {
       },
     };
   } catch (error) {
-    console.error("Error fetching user data:", error);
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
     return {
       props: {
-        errorMessage: "There was an error fetching the user data",
+        errorMessage,
       },
     };
   }

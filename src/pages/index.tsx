@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFavorites } from "@/context/FavoritesContext";
 import { fetchGitHubUsers, searchGitHubUsers } from "@/services/GithubApi";
-import { GitHubUser } from "@/types/GitHubUser";
-import { debounce } from "@/utils";
+import { GitHubUserType } from "@/types/GitHubUser";
+import { debounce } from "@/lib/utils";
 import { Heart } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -14,16 +14,15 @@ export default function Home({
   initialUsers,
   errorMessage,
 }: {
-  initialUsers: GitHubUser[];
+  initialUsers: GitHubUserType[];
   errorMessage?: string;
 }) {
-  const [users, setUsers] = useState<GitHubUser[]>(initialUsers);
+  const [users, setUsers] = useState<GitHubUserType[]>(initialUsers);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const { favorites, showFavoritesOnly, toggleShowFavorites } = useFavorites();
 
-  // Show toast messages only after component mounts (client-side)
   useEffect(() => {
     if (errorMessage) {
       toast.error(errorMessage);
@@ -50,6 +49,7 @@ export default function Home({
         const results = await searchGitHubUsers(query);
         setUsers(results);
         setSearchError(null);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         setSearchError("Failed to search users");
         setUsers([]);
@@ -108,13 +108,13 @@ export default function Home({
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center">
         {isSearching ? (
-          <span>Searching...</span>
+          <span className="min-w-72 w-full text-center">Searching...</span>
         ) : displayedUsers.length > 0 ? (
           displayedUsers.map((user) => (
             <UserCard key={user.id} user={user} />
           ))
         ) : (
-          <span>
+          <span className="min-w-72 w-full text-center">
             {showFavoritesOnly ? "No favorite users found" : "No users found"}
           </span>
         )}
@@ -133,10 +133,11 @@ export async function getServerSideProps() {
       },
     };
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
     return {
       props: {
         initialUsers: [],
-        errorMessage: error.message,
+        errorMessage,
       },
     };
   }

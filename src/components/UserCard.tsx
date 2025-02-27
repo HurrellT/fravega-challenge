@@ -1,11 +1,11 @@
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { GitHubUser } from "@/types/GitHubUser";
+import { GitHubUserType } from "@/types/GitHubUser";
 import { useRouter } from "next/router";
 
 type UserCardProps = {
-  user: GitHubUser;
+  user: GitHubUserType;
   showFavoriteButton?: boolean;
 };
 

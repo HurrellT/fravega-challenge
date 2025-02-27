@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { ThemeToggle } from "../theme-toggle";
+import { ThemeToggle } from "../ThemeToggle";
 
 function Template({ children }: { children: React.ReactNode }) {
   const router = useRouter();

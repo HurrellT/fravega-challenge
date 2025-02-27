@@ -60,9 +60,9 @@ peticiones a la API por nombre.
 X Cada usuario debe tener un enlace a una página de detalle.
 X Poder poner como favorito los usuarios (sin necesidad de persistir)
 2. Página de Detalle del Usuario (usar ssr)
-○ Mostrar los detalles de un usuario específico cuando se hace clic en él
+X Mostrar los detalles de un usuario específico cuando se hace clic en él
 desde la página de listado (nombre, avatar, bio, repositorios, etc.).
-○ Mostrar si es favorito y permitir agregar o eliminarlo
+X Mostrar si es favorito y permitir agregar o eliminarlo
 3. Estilo
 ○ Podes usar CSS puro, styled-components o una librería de componentes
 como Material-UI para el estilo.

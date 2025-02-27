@@ -1,11 +1,11 @@
 import { useFavorites } from "@/context/FavoritesContext";
 import { cn } from "@/lib/utils";
-import { GitHubUser } from "@/types/GitHubUser";
+import { GitHubUserType } from "@/types/GitHubUser";
 import { Heart } from "lucide-react";
 import { Button } from "./ui/button";
 
 interface FavoriteButtonProps {
-  user: GitHubUser;
+  user: GitHubUserType;
   className?: string;
 }
 

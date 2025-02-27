@@ -1,4 +1,4 @@
-export type GitHubUser = {
+export type GitHubUserType = {
   login: string;
   id: number;
   node_id: string;
@@ -15,7 +15,7 @@ export type GitHubUser = {
   repos_url: string;
   events_url: string;
   received_events_url: string;
-  type: Type;
+  type: GHUserKind;
   user_view_type: "public";
   site_admin: boolean;
   name?: string;
@@ -34,12 +34,12 @@ export type GitHubUser = {
   updated_at?: string;
 }
 
-export enum Type {
+export enum GHUserKind {
   Organization = "Organization",
   User = "User",
 }
 
-export type Repository = {
+export type GHUserRepositoryType = {
   id: number;
   name: string;
   full_name: string;
@@ -50,7 +50,7 @@ export type Repository = {
   forks_count: number;
 }
 
-export type Gist = {
+export type GHUserGistType = {
   id: string;
   description: string | null;
   html_url: string;

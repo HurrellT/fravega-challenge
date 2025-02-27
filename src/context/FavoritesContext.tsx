@@ -1,9 +1,9 @@
-import { GitHubUser } from "@/types/GitHubUser";
+import { GitHubUserType } from "@/types/GitHubUser";
 import { createContext, useContext, useState, ReactNode } from "react";
 
 interface FavoritesContextType {
-  favorites: GitHubUser[];
-  addToFavorites: (user: GitHubUser) => void;
+  favorites: GitHubUserType[];
+  addToFavorites: (user: GitHubUserType) => void;
   removeFromFavorites: (userId: number) => void;
   isFavorite: (userId: number) => boolean;
   showFavoritesOnly: boolean;
@@ -23,10 +23,10 @@ export function useFavorites() {
 }
 
 export function FavoritesProvider({ children }: { children: ReactNode }) {
-  const [favorites, setFavorites] = useState<GitHubUser[]>([]);
+  const [favorites, setFavorites] = useState<GitHubUserType[]>([]);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
-  const addToFavorites = (user: GitHubUser) => {
+  const addToFavorites = (user: GitHubUserType) => {
     setFavorites((prev) => [...prev, user]);
   };
 

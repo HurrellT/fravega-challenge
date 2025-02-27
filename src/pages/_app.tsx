@@ -1,4 +1,4 @@
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/styles/ThemeProvider";
 import { FavoritesProvider } from "@/context/FavoritesContext";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";

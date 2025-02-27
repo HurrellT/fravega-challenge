@@ -1,4 +1,4 @@
-import { Gist, GitHubUser, Repository } from "@/types/GitHubUser";
+import { GHUserGistType, GitHubUserType, GHUserRepositoryType } from "@/types/GitHubUser";
 
 const GITHUB_API_BASE_URL = process.env.NEXT_PUBLIC_GITHUB_API_BASE_URL; // I set this in a constant for performance reasons
 const ENDPOINTS = {
@@ -6,7 +6,7 @@ const ENDPOINTS = {
   SEARCH: '/search',
 };
 
-export const fetchGitHubUsers = async (): Promise<GitHubUser[]> => {
+export const fetchGitHubUsers = async (): Promise<GitHubUserType[]> => {
   const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.USERS}?per_page=32`);
   
   if (!response.ok) {
@@ -16,7 +16,7 @@ export const fetchGitHubUsers = async (): Promise<GitHubUser[]> => {
   return await response.json();
 }
 
-export const searchGitHubUsers = async (query: string): Promise<GitHubUser[]> => {
+export const searchGitHubUsers = async (query: string): Promise<GitHubUserType[]> => {
   const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.SEARCH}/users?q=${encodeURIComponent(query)}&per_page=32`);
   
   if (!response.ok) {
@@ -27,7 +27,7 @@ export const searchGitHubUsers = async (query: string): Promise<GitHubUser[]> =>
   return data.items || []; // GitHub search API returns results in an 'items' property
 }
 
-export const fetchGitHubUser = async (username: string): Promise<GitHubUser> => {
+export const fetchGitHubUser = async (username: string): Promise<GitHubUserType> => {
   const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.USERS}/${username}`);
   
   if (!response.ok) {
@@ -37,7 +37,7 @@ export const fetchGitHubUser = async (username: string): Promise<GitHubUser> => 
   return await response.json();
 }
 
-export const fetchUserRepositories = async (username: string): Promise<Repository[]> => {
+export const fetchUserRepositories = async (username: string): Promise<GHUserRepositoryType[]> => {
   // Adding sort=updated to get the most recently updated repositories
   const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.USERS}/${username}/repos?per_page=5&sort=updated&direction=desc`);
   
@@ -48,7 +48,7 @@ export const fetchUserRepositories = async (username: string): Promise<Repositor
   return await response.json();
 }
 
-export const fetchUserFollowers = async (username: string): Promise<GitHubUser[]> => {
+export const fetchUserFollowers = async (username: string): Promise<GitHubUserType[]> => {
   const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.USERS}/${username}/followers?per_page=6`);
   
   if (!response.ok) {
@@ -58,7 +58,7 @@ export const fetchUserFollowers = async (username: string): Promise<GitHubUser[]
   return await response.json();
 }
 
-export const fetchUserFollowing = async (username: string): Promise<GitHubUser[]> => {
+export const fetchUserFollowing = async (username: string): Promise<GitHubUserType[]> => {
   const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.USERS}/${username}/following?per_page=6`);
   
   if (!response.ok) {
@@ -68,7 +68,7 @@ export const fetchUserFollowing = async (username: string): Promise<GitHubUser[]
   return await response.json();
 }
 
-export const fetchUserGists = async (username: string): Promise<Gist[]> => {
+export const fetchUserGists = async (username: string): Promise<GHUserGistType[]> => {
   // Using sort=updated to get the latest gists
   const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.USERS}/${username}/gists?per_page=5&sort=updated&direction=desc`);
   
