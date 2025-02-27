@@ -1,4 +1,5 @@
 import { UserCard } from "@/components/UserCard";
+import { UserCardSkeleton } from "@/components/UserCardSkeleton";
 import Template from "@/components/templates/Template";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -144,9 +145,9 @@ export default function Home({
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center mb-6 flex-grow">
           {isSearching || isLoading ? (
-            <div className="col-span-full flex items-center justify-center w-full">
-              <span className="text-center">Loading...</span>
-            </div>
+            Array.from({ length: USERS_PER_PAGE }).map((_, index) => (
+              <UserCardSkeleton key={index} />
+            ))
           ) : displayedUsers.length > 0 ? (
             displayedUsers.map((user) => (
               <UserCard key={user.id} user={user} />
