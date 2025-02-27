@@ -18,9 +18,42 @@ export type GitHubUser = {
   type: Type;
   user_view_type: "public";
   site_admin: boolean;
+  name?: string;
+  company?: string;
+  blog?: string;
+  location?: string;
+  email?: string;
+  hireable?: boolean | null;
+  bio?: string | null;
+  twitter_username?: string;
+  public_repos?: number;
+  public_gists?: number;
+  followers?: number;
+  following?: number;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export enum Type {
   Organization = "Organization",
   User = "User",
+}
+
+export type Repository = {
+  id: number;
+  name: string;
+  full_name: string;
+  description: string | null;
+  html_url: string;
+  stargazers_count: number;
+  language: string | null;
+  forks_count: number;
+}
+
+export type Gist = {
+  id: string;
+  description: string | null;
+  html_url: string;
+  files: Record<string, {filename: string}>;
+  created_at: string;
 }

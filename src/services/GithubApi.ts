@@ -1,4 +1,4 @@
-import { GitHubUser } from "@/types/GitHubUser";
+import { Gist, GitHubUser, Repository } from "@/types/GitHubUser";
 
 const GITHUB_API_BASE_URL = process.env.NEXT_PUBLIC_GITHUB_API_BASE_URL; // I set this in a constant for performance reasons
 const ENDPOINTS = {
@@ -32,6 +32,48 @@ export const fetchGitHubUser = async (username: string): Promise<GitHubUser> => 
   
   if (!response.ok) {
     throw new Error(`Failed to fetch GitHub user: ${response.status}`);
+  }
+  
+  return await response.json();
+}
+
+export const fetchUserRepositories = async (username: string): Promise<Repository[]> => {
+  // Adding sort=updated to get the most recently updated repositories
+  const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.USERS}/${username}/repos?per_page=5&sort=updated&direction=desc`);
+  
+  if (!response.ok) {
+    throw new Error(`Failed to fetch repositories: ${response.status}`);
+  }
+  
+  return await response.json();
+}
+
+export const fetchUserFollowers = async (username: string): Promise<GitHubUser[]> => {
+  const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.USERS}/${username}/followers?per_page=6`);
+  
+  if (!response.ok) {
+    throw new Error(`Failed to fetch followers: ${response.status}`);
+  }
+  
+  return await response.json();
+}
+
+export const fetchUserFollowing = async (username: string): Promise<GitHubUser[]> => {
+  const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.USERS}/${username}/following?per_page=6`);
+  
+  if (!response.ok) {
+    throw new Error(`Failed to fetch following: ${response.status}`);
+  }
+  
+  return await response.json();
+}
+
+export const fetchUserGists = async (username: string): Promise<Gist[]> => {
+  // Using sort=updated to get the latest gists
+  const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.USERS}/${username}/gists?per_page=5&sort=updated&direction=desc`);
+  
+  if (!response.ok) {
+    throw new Error(`Failed to fetch gists: ${response.status}`);
   }
   
   return await response.json();

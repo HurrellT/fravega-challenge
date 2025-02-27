@@ -1,15 +1,12 @@
-import { FavoriteButton } from "@/components/FavoriteButton";
+import { UserCard } from "@/components/UserCard";
 import Template from "@/components/templates/Template";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useFavorites } from "@/context/FavoritesContext";
 import { fetchGitHubUsers, searchGitHubUsers } from "@/services/GithubApi";
 import { GitHubUser } from "@/types/GitHubUser";
 import { debounce } from "@/utils";
 import { Heart } from "lucide-react";
-import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -24,8 +21,20 @@ export default function Home({
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [searchError, setSearchError] = useState<string | null>(null);
-  const router = useRouter();
   const { favorites, showFavoritesOnly, toggleShowFavorites } = useFavorites();
+
+  // Show toast messages only after component mounts (client-side)
+  useEffect(() => {
+    if (errorMessage) {
+      toast.error(errorMessage);
+    }
+  }, [errorMessage]);
+
+  useEffect(() => {
+    if (searchError) {
+      toast.error(searchError);
+    }
+  }, [searchError]);
 
   const performSearch = useCallback(
     async (query: string) => {
@@ -98,30 +107,11 @@ export default function Home({
         </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center">
-        {errorMessage && toast(errorMessage)}
-        {searchError && toast(searchError)}
         {isSearching ? (
           <span>Searching...</span>
         ) : displayedUsers.length > 0 ? (
           displayedUsers.map((user) => (
-            <Card
-              key={user.id}
-              onClick={() => router.push(`/${user.login}`)}
-              className="relative cursor-pointer hover:shadow-md transition-shadow min-w-72 w-full"
-            >
-              <CardContent className="flex items-center gap-4 p-6 justify-between">
-                <div className="flex items-center gap-4">
-                  <Avatar>
-                    <AvatarImage src={user.avatar_url} />
-                    <AvatarFallback>
-                      {user.login.slice(0, 2).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <CardTitle>{user.login}</CardTitle>
-                </div>
-                <FavoriteButton user={user} />
-              </CardContent>
-            </Card>
+            <UserCard key={user.id} user={user} />
           ))
         ) : (
           <span>
@@ -146,8 +136,7 @@ export async function getServerSideProps() {
     return {
       props: {
         initialUsers: [],
-        error,
-        errorMessage: "There was an error fetching the users",
+        errorMessage: error.message,
       },
     };
   }
