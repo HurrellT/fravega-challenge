@@ -21,7 +21,7 @@ function Template({ children }: { children: React.ReactNode }) {
       <main className="flex flex-col gap-8 items-center justify-center w-full py-8">
         {children}
       </main>
-      <footer className="flex gap-6 flex-wrap items-center justify-center">
+      <footer className="flex gap-6 flex-wrap items-center justify-center p-4">
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
           href="https://fravega.com"

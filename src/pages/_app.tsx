@@ -1,6 +1,8 @@
 import { ThemeProvider } from "@/components/theme-provider";
+import { FavoritesProvider } from "@/context/FavoritesContext";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
+import { Toaster } from "sonner";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -10,7 +12,10 @@ export default function App({ Component, pageProps }: AppProps) {
       enableSystem
       disableTransitionOnChange
     >
-      <Component {...pageProps} />
+      <FavoritesProvider>
+        <Component {...pageProps} />
+        <Toaster position="top-right" />
+      </FavoritesProvider>
     </ThemeProvider>
   );
 }

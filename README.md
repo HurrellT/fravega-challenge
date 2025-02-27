@@ -57,8 +57,8 @@ X Obtén una lista inicial de usuarios de la API de GitHub Users.
 X Mostrar los usuarios en una lista con sus nombres y avatares.
 X Implementar un buscador que permita filtrar los usuarios haciendo
 peticiones a la API por nombre.
-○ Cada usuario debe tener un enlace a una página de detalle.
-○ Poder poner como favorito los usuarios (sin necesidad de persistir)
+X Cada usuario debe tener un enlace a una página de detalle.
+X Poder poner como favorito los usuarios (sin necesidad de persistir)
 2. Página de Detalle del Usuario (usar ssr)
 ○ Mostrar los detalles de un usuario específico cuando se hace clic en él
 desde la página de listado (nombre, avatar, bio, repositorios, etc.).
