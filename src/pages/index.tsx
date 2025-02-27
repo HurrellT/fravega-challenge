@@ -119,60 +119,67 @@ export default function Home({
 
   return (
     <Template>
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
-        <div className="relative w-64">
-          <Input
-            type="search"
-            placeholder="Search users..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
+      <div className="flex flex-col h-full">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-6">
+          <div className="w-64">
+            <Input
+              type="search"
+              placeholder="Search users..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+          </div>
+          <Button
+            variant={showFavoritesOnly ? "default" : "outline"}
+            onClick={toggleShowFavorites}
+            className="flex items-center justify-center gap-2 min-w-[160px]"
+          >
+            <Heart
+              className="h-4 w-4"
+              fill={showFavoritesOnly ? "currentColor" : "none"}
+            />
+            {showFavoritesOnly ? "Show All Users" : "Show Favorites"}
+          </Button>
         </div>
-        <Button
-          variant={showFavoritesOnly ? "default" : "outline"}
-          onClick={toggleShowFavorites}
-          className="flex items-center justify-center gap-2 min-w-[160px]"
-        >
-          <Heart
-            className="h-4 w-4"
-            fill={showFavoritesOnly ? "currentColor" : "none"}
-          />
-          {showFavoritesOnly ? "Show All Users" : "Show Favorites"}
-        </Button>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center mb-6">
-        {isSearching || isLoading ? (
-          <span className="min-w-72 w-full text-center">Loading...</span>
-        ) : displayedUsers.length > 0 ? (
-          displayedUsers.map((user) => (
-            <UserCard key={user.id} user={user} />
-          ))
-        ) : (
-          <span className="min-w-72 w-full text-center">
-            {showFavoritesOnly ? "No favorite users found" : "No users found"}
-          </span>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center mb-6 flex-grow">
+          {isSearching || isLoading ? (
+            <div className="col-span-full flex items-center justify-center w-full">
+              <span className="text-center">Loading...</span>
+            </div>
+          ) : displayedUsers.length > 0 ? (
+            displayedUsers.map((user) => (
+              <UserCard key={user.id} user={user} />
+            ))
+          ) : (
+            <div className="col-span-full flex items-center justify-center w-full">
+              <span className="text-center">
+                {showFavoritesOnly ? "No favorite users found" : "No users found"}
+              </span>
+            </div>
+          )}
+        </div>
+        
+        {!showFavoritesOnly && displayedUsers.length > 0 && (
+          <div className="flex justify-center items-center gap-4 py-4">
+            <Button 
+              variant="outline" 
+              onClick={goToPreviousPage} 
+              disabled={currentPage === 1 || isLoading || isSearching}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <span className="text-sm">Page {currentPage}</span>
+            <Button 
+              variant="outline" 
+              onClick={goToNextPage}
+              disabled={displayedUsers.length < USERS_PER_PAGE || isLoading || isSearching}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
         )}
       </div>
-      
-      {!showFavoritesOnly && displayedUsers.length > 0 && (
-        <div className="flex justify-center items-center gap-4 mt-4">
-          <Button 
-            variant="outline" 
-            onClick={goToPreviousPage} 
-            disabled={currentPage === 1 || isLoading || isSearching}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <span className="text-sm">Page {currentPage}</span>
-          <Button 
-            variant="outline" 
-            onClick={goToNextPage}
-            disabled={displayedUsers.length < USERS_PER_PAGE || isLoading || isSearching}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
-      )}
     </Template>
   );
 }
