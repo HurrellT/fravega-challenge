@@ -97,7 +97,7 @@ export default function Home({
         <Button
           variant={showFavoritesOnly ? "default" : "outline"}
           onClick={toggleShowFavorites}
-          className="flex items-center gap-2"
+          className="flex items-center justify-center gap-2 min-w-[160px]"
         >
           <Heart
             className="h-4 w-4"
