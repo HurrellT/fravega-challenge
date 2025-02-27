@@ -6,8 +6,8 @@ const ENDPOINTS = {
   SEARCH: '/search',
 };
 
-export const fetchGitHubUsers = async (): Promise<GitHubUserType[]> => {
-  const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.USERS}?per_page=32`);
+export const fetchGitHubUsers = async (page = 1, perPage = 12): Promise<GitHubUserType[]> => {
+  const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.USERS}?per_page=${perPage}&since=${(page - 1) * perPage}`);
   
   if (!response.ok) {
     throw new Error(`Failed to fetch GitHub users: ${response.status}`);
@@ -16,15 +16,15 @@ export const fetchGitHubUsers = async (): Promise<GitHubUserType[]> => {
   return await response.json();
 }
 
-export const searchGitHubUsers = async (query: string): Promise<GitHubUserType[]> => {
-  const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.SEARCH}/users?q=${encodeURIComponent(query)}&per_page=32`);
+export const searchGitHubUsers = async (query: string, page = 1, perPage = 12): Promise<GitHubUserType[]> => {
+  const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.SEARCH}/users?q=${encodeURIComponent(query)}&per_page=${perPage}&page=${page}`);
   
   if (!response.ok) {
     throw new Error(`Failed to search GitHub users: ${response.status}`);
   }
   
   const data = await response.json();
-  return data.items || []; // GitHub search API returns results in an 'items' property
+  return data.items || [];
 }
 
 export const fetchGitHubUser = async (username: string): Promise<GitHubUserType> => {
@@ -38,7 +38,6 @@ export const fetchGitHubUser = async (username: string): Promise<GitHubUserType>
 }
 
 export const fetchUserRepositories = async (username: string): Promise<GHUserRepositoryType[]> => {
-  // Adding sort=updated to get the most recently updated repositories
   const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.USERS}/${username}/repos?per_page=5&sort=updated&direction=desc`);
   
   if (!response.ok) {
@@ -69,7 +68,6 @@ export const fetchUserFollowing = async (username: string): Promise<GitHubUserTy
 }
 
 export const fetchUserGists = async (username: string): Promise<GHUserGistType[]> => {
-  // Using sort=updated to get the latest gists
   const response = await fetch(`${GITHUB_API_BASE_URL}${ENDPOINTS.USERS}/${username}/gists?per_page=5&sort=updated&direction=desc`);
   
   if (!response.ok) {

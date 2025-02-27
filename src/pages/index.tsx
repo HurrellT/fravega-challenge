@@ -6,9 +6,11 @@ import { useFavorites } from "@/context/FavoritesContext";
 import { fetchGitHubUsers, searchGitHubUsers } from "@/services/GithubApi";
 import { GitHubUserType } from "@/types/GitHubUser";
 import { debounce } from "@/lib/utils";
-import { Heart } from "lucide-react";
+import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+
+const USERS_PER_PAGE = 24;
 
 export default function Home({
   initialUsers,
@@ -21,6 +23,8 @@ export default function Home({
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [searchError, setSearchError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { favorites, showFavoritesOnly, toggleShowFavorites } = useFavorites();
 
   useEffect(() => {
@@ -35,10 +39,30 @@ export default function Home({
     }
   }, [searchError]);
 
+  const loadUsers = useCallback(async (page: number) => {
+    if (searchTerm.length < 3) {
+      setIsLoading(true);
+      try {
+        const results = await fetchGitHubUsers(page, USERS_PER_PAGE);
+        setUsers(results);
+      } catch (error) {
+        toast.error("Failed to load users");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  }, [searchTerm]);
+
+  useEffect(() => {
+    if (!searchTerm || searchTerm.length < 3) {
+      loadUsers(currentPage);
+    }
+  }, [currentPage, loadUsers, searchTerm]);
+
   const performSearch = useCallback(
     async (query: string) => {
       if (!query || query.length < 3) {
-        setUsers(initialUsers);
+        loadUsers(currentPage);
         setIsSearching(false);
         setSearchError(null);
         return;
@@ -46,7 +70,7 @@ export default function Home({
 
       setIsSearching(true);
       try {
-        const results = await searchGitHubUsers(query);
+        const results = await searchGitHubUsers(query, currentPage, USERS_PER_PAGE);
         setUsers(results);
         setSearchError(null);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -57,7 +81,7 @@ export default function Home({
         setIsSearching(false);
       }
     },
-    [initialUsers]
+    [currentPage, loadUsers]
   );
 
   const debouncedSearch = useMemo(
@@ -67,11 +91,12 @@ export default function Home({
 
   useEffect(() => {
     debouncedSearch(searchTerm);
-  }, [searchTerm, debouncedSearch]);
+  }, [searchTerm, debouncedSearch, currentPage]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
+    setCurrentPage(1);
   };
 
   const displayedUsers = useMemo(() => {
@@ -82,6 +107,14 @@ export default function Home({
     }
     return users;
   }, [users, favorites, showFavoritesOnly, searchTerm]);
+
+  const goToNextPage = () => {
+    setCurrentPage((prev) => prev + 1);
+  };
+
+  const goToPreviousPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
 
   return (
     <Template>
@@ -106,9 +139,9 @@ export default function Home({
           {showFavoritesOnly ? "Show All Users" : "Show Favorites"}
         </Button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center">
-        {isSearching ? (
-          <span className="min-w-72 w-full text-center">Searching...</span>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center mb-6">
+        {isSearching || isLoading ? (
+          <span className="min-w-72 w-full text-center">Loading...</span>
         ) : displayedUsers.length > 0 ? (
           displayedUsers.map((user) => (
             <UserCard key={user.id} user={user} />
@@ -119,13 +152,33 @@ export default function Home({
           </span>
         )}
       </div>
+      
+      {!showFavoritesOnly && displayedUsers.length > 0 && (
+        <div className="flex justify-center items-center gap-4 mt-4">
+          <Button 
+            variant="outline" 
+            onClick={goToPreviousPage} 
+            disabled={currentPage === 1 || isLoading || isSearching}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <span className="text-sm">Page {currentPage}</span>
+          <Button 
+            variant="outline" 
+            onClick={goToNextPage}
+            disabled={displayedUsers.length < USERS_PER_PAGE || isLoading || isSearching}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      )}
     </Template>
   );
 }
 
 export async function getServerSideProps() {
   try {
-    const users = await fetchGitHubUsers();
+    const users = await fetchGitHubUsers(1, USERS_PER_PAGE);
 
     return {
       props: {
