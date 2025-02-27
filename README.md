@@ -1,5 +1,7 @@
 # Fravega Challenge
 
+[Deploy]()
+
 Proyecto [Next.js](https://nextjs.org) creado con [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
 
 ## Para empezar
@@ -47,3 +49,4 @@ https://api.github.com/users/{username}
 
 Dada la libertad para utilizar librerías de componentes decidí utilizar ShadcnUI que permite la customización de los componentes directamente desde el código y no mediante una interfaz provista por el desarrollador de la librería de componentes.
 ShadcnUI utiliza TailwindCSS, por eso mismo utilice TailwindCSS para el resto de los estilos, manteniendo consistencia y coherencia a lo largo del proyecto.
+Se publican las variables de entorno por pertenecer a un contexto de challenge técnico.

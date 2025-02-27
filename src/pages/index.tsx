@@ -45,6 +45,7 @@ export default function Home({
       try {
         const results = await fetchGitHubUsers(page, USERS_PER_PAGE);
         setUsers(results);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         toast.error("Failed to load users");
       } finally {
